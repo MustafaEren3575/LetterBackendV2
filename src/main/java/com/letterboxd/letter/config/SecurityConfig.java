@@ -38,11 +38,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(request -> { // <-- CORS BURAYA ZİNCİRE EKLENDİ
+                .cors(cors -> cors.configurationSource(request -> {
                     var config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:5173"));
-                    config.setAllowedMethods(List.of("*"));
+                    // HEM LOCALHEST HEM VERCEL LINKINI EKLEDIK
+                    config.setAllowedOrigins(List.of(
+                            "http://localhost:5173",
+                            "https://letter-front-zeta.vercel.app"
+                    ));
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
+                    config.setAllowCredentials(true); // Token işlemleri için bu şart
                     return config;
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
